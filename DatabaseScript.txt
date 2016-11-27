@@ -1,0 +1,55 @@
+--
+-- Base de datos: `library`
+--
+CREATE DATABASE IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+USE `library`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `books`
+--
+
+CREATE TABLE `books` (
+  `id` int(11) NOT NULL,
+  `Title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  `Author` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `Description` longtext COLLATE utf8_spanish_ci NOT NULL,
+  `Pages` int(11) NOT NULL,
+  `Cover` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `Availablity` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `books`
+--
+
+
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(1, 'Scott pilgim 1', 'Bryan O Malley', '', 0, 'c6ab9774-a1b4-472.jpg', 0);
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(2, 'Scott pilgim 2', 'Bryan O Malley', 'Sequel of Scott pilgrim 1', 4, '31ade6ec-f58b-4a2.jpg', 0);
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(3, 'SomeBook', 'Claudio', 'didnt have desc', 300, '35df4033-6ba7-e23.jpg', 0);
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(4, 'Otherbook', 'Claudio', 'another desc', 300, '36df4093-6ba7-e6.jpg', 0);
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(5, 'The Doom that Came to Sarnath', 'LoveCraft', 'didnt have desc', 300, '31ade6ec-6ba7-4a2.jpg', 0);
+INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(6, 'The Tree', 'LoveCraft', 'didnt have desc', 300, 'c6ab9774-6ba7-4a2.jpg', 0);
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `books`
+--
+ALTER TABLE `books`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `books`
+--
+ALTER TABLE `books`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
