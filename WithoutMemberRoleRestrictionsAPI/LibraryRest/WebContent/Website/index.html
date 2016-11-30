@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html class="no-js">
+
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="all,follow">
+        <meta name="googlebot" content="index,follow,snippet,archive">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta property="og:title" content="Library | Library system for book registry handling">
+        <meta property="og:site_name" content="Library | Library system for book registry handling">
+        <meta property="og:image" content="">  
+        <title>Library | Library system for book registry handling</title>
+
+        <meta name="keywords" content="">
+
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900' rel='stylesheet' type='text/css'>
+		<script src="js/jquery.js"></script>
+		<script src="js/dataTables.js"></script>
+		<script src="js/booksTable.js"></script>
+		
+		<script src="js/bootstrap.js"></script>		
+		<script src="js/dropzone.js"></script>
+  		<script src="js/booksDropzone.js"></script>
+		<script src="js/modernizr-2.6.2.min.js"></script>
+
+		
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
+		<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+		<link rel="stylesheet" href="css/dropzone.css">
+		<link rel=stylesheet href="css/maincontainer.css">
+		<link href="css/font-awesome.css" rel="stylesheet">
+        <link href="css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+		<link rel="shortcut icon" href="favicon.png">
+
+      
+
+
+    </head>
+
+    <body>
+
+
+        <!--  NAVBAR -->
+
+        <div class="navbar navbar-default navbar-fixed-top load-in one" role="navigation" id="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand scrollTo" href="#intro">Library</a>
+                </div>
+
+                <div class="navbar-collapse collapse" id="navigation">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a id="loadbooks" href="#books">Books</a>
+                        </li>
+                        <li><a href="#members">Member Registration</a>
+                        </li>
+                        <li><a href="#about">About us</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--nav-collapse -->
+
+            </div>
+        </div>
+        <!-- NAVBAR END -->
+
+
+        <div id="all">
+
+            <div id="intro" class="clearfix">
+                <div class="item">
+                    <div class="container">
+                        <div class="row">
+
+							<div class="container" >
+
+							  <!-- Form modal -->
+							  <div class="modal fade" id="myModal" role="dialog">
+								<div class="modal-dialog">
+
+								  <!-- Modal content-->
+								  <div class="modal-content">
+									<div class="modal-header" style="padding:35px 50px;">
+									  <button type="button" class="close" data-dismiss="modal">&times;</button>
+									  <h4 id="book-modal-headline"><span class="glyphicon glyphicon-book"></span> Insert Book</h4>
+									</div>
+									<div class="modal-body" style="padding:40px 50px;">
+										  <form role="form" >
+												<div class="form-group">
+												  <input type="text" class="form-control" id="Title" placeholder="Enter Title" required>
+												</div>
+												<div class="form-group">
+												  <input type="text" class="form-control" id="Author" placeholder="Enter Author" required>
+												</div>
+												<div class="form-group">
+												  <textarea name="Description" id="Description" class="formTextArea" placeholder="Enter description"></textarea>
+												</div>
+												<div class="form-group">
+												 <input type="number" min="1" class="form-control" id="Pages" placeholder="Enter Pages" required>
+												 <input type="hidden" id="modal-form-id" value="0" >
+												</div>
+												<div id="uploadme" class="dropzone"></div>
+												<button type="submit" id="newbookform" class="btn btn-success btn-block dropzone-submit" value="Submit"><span class="glyphicon glyphicon-edit"></span> Insert</button>
+										  </form>
+									</div>
+									<div class="modal-footer">
+									  <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+									</div>
+								  </div>
+								</div>
+							  </div>
+								<!-- Modal content-->
+
+								<!-- Alert Modal-->
+								<div class="modal fade" id="alertModal" role="dialog">
+									<div class="modal-dialog">		
+									  <!-- Modal content-->
+									  <div class="modal-content">
+										<div class="modal-header" style="padding:35px 50px;">
+											<h4 id="alert-modal-headline"></h4>
+										  <button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body" id="alertContainer" style="padding:40px 50px;">
+
+										</div>
+									  </div>
+									</div>
+								</div>
+								<!-- Modal content-->
+
+								 <div class="row" id="loadContainer">
+									<!-- Table content-->
+									<div class="jumbotron jumbotron-responsive  col-md-offset-4 load-in three">
+										<div class="row">
+											<button type="button" id="book-modal-button" class="btn btn-sm btn-success btn-lg" data-toggle="modal" data-target="#myModal">Insert Book</button>
+										</div>
+										<div class=" row table table-responsive">
+											<table id="example" class="table-hover table-bordered display nowrap compact"  cellspacing="0" width="100%">
+											<thead>
+												<tr>
+													<th>id</th>
+													<th>Title</th>
+													<th>Author</th>
+													<th>Pages</th>
+													<th>Cover</th>
+													<th>Edit</th>
+													<th>Delete</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>id</th>
+													<th>Title</th>
+													<th>Author</th>
+													<th>Pages</th>
+													<th class="hidden">Cover</th>
+													<th class="hidden">Delete</th>
+													<th class="hidden">Edit</th>
+												</tr>
+											</tfoot>
+										</table>
+										</div>
+									</div>
+									<!-- Table content-->
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--  INTRO IMAGE  *** -->
+
+
+
+        
+
+            <!-- Footer -->
+
+            <div class="section load-in two" id="footer">
+                <div class="container">
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+
+                            <p class="social">
+                                <a href="https://github.com/UlisesFS-ISC" class="external instagram" ><i class="fa fa-github"></i></a>
+                                <a href="mailto:lexsius@hotmail.com" class="email" ><i class="fa fa-envelope"></i></a>
+                            </p>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <p> 2016 Ulises Fajardo. 
+                               </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- section -->
+
+            <!-- FOOTER END  -->
+        </div>
+
+
+
+    </body>
+</html>
