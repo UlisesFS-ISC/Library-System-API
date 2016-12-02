@@ -3,5 +3,5 @@ Java Jersey web API using a JDBC connected MySQL Database for data storage, requ
 
 TO-DO: Password encryption, 
 PDF generating functions,
-member control funtions,
+member control functions,
 Member lat,Long storing
