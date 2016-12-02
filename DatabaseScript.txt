@@ -1,3 +1,12 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
 -- Base de datos: `library`
 --
@@ -10,46 +19,181 @@ USE `library`;
 -- Estructura de tabla para la tabla `books`
 --
 
-CREATE TABLE `books` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `books` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `Author` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `Description` longtext COLLATE utf8_spanish_ci NOT NULL,
   `Pages` int(11) NOT NULL,
   `Cover` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `Availablity` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+  `Availability` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla `books`
+-- RELACIONES PARA LA TABLA `books`:
 --
 
 
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(1, 'Scott pilgim 1', 'Bryan O Malley', '', 0, 'c6ab9774-a1b4-472.jpg', 0);
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(2, 'Scott pilgim 2', 'Bryan O Malley', 'Sequel of Scott pilgrim 1', 4, '31ade6ec-f58b-4a2.jpg', 0);
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(3, 'SomeBook', 'Claudio', 'didnt have desc', 300, '35df4033-6ba7-e23.jpg', 0);
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(4, 'Otherbook', 'Claudio', 'another desc', 300, '36df4093-6ba7-e6.jpg', 0);
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(5, 'The Doom that Came to Sarnath', 'LoveCraft', 'didnt have desc', 300, '31ade6ec-6ba7-4a2.jpg', 0);
-INSERT INTO `books` (`id`, `Title`, `Author`, `Description`, `Pages`, `Cover`, `Availablity`) VALUES(6, 'The Tree', 'LoveCraft', 'didnt have desc', 300, 'c6ab9774-6ba7-4a2.jpg', 0);
 --
--- Índices para tablas volcadas
+-- Disparadores `books`
+--
+DELIMITER $$
+CREATE TRIGGER `logDeletionsBook` AFTER DELETE ON `books` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"DELETE","books", OLD.id, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logInsertionsBook` AFTER INSERT ON `books` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"INSERT","books", NEW.id, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logUpdatesBook` AFTER UPDATE ON `books` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"UPDATE","books", NEW.id, NOW() )
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `librarylog`
+--
+
+CREATE TABLE IF NOT EXISTS `librarylog` (
+  `ID_Movement` int(11) NOT NULL AUTO_INCREMENT,
+  `Type` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `TableName` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `ID_TableRow` int(11) NOT NULL,
+  `MovementDate` datetime NOT NULL,
+  PRIMARY KEY (`ID_Movement`)
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- RELACIONES PARA LA TABLA `librarylog`:
 --
 
 --
--- Indices de la tabla `books`
---
-ALTER TABLE `books`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
+-- Volcado de datos para la tabla `librarylog`
 --
 
+
+
+
+-- --------------------------------------------------------
+
 --
--- AUTO_INCREMENT de la tabla `books`
+-- Estructura de tabla para la tabla `members`
 --
-ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+
+CREATE TABLE IF NOT EXISTS `members` (
+  `ID_Member` int(11) NOT NULL AUTO_INCREMENT,
+  `Email` varchar(60) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Password` text CHARACTER SET utf16 COLLATE utf16_spanish_ci NOT NULL,
+  `FirstName` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `LastName` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `Phone` int(10) NOT NULL,
+  `Street` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `City` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `State` varchar(40) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `PostalCode` varchar(10) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `Lat` double DEFAULT '0',
+  `Lon` double DEFAULT '0',
+  `TotalRentals` int(11) DEFAULT '0',
+  `PendingReturns` int(11) DEFAULT '0',
+  `Role` enum('Admin','Client') COLLATE utf8mb4_spanish_ci DEFAULT 'Client',
+  PRIMARY KEY (`ID_Member`),
+  UNIQUE KEY `Email` (`Email`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- RELACIONES PARA LA TABLA `members`:
+--
+
+
+
+
+--
+-- Disparadores `members`
+--
+DELIMITER $$
+CREATE TRIGGER `logDeletionsMembers` AFTER DELETE ON `members` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"DELETE","members", OLD.ID_Member, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logInsertionsMembers` AFTER INSERT ON `members` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"INSERT","members", NEW.ID_Member, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logUpdatesMembers` AFTER UPDATE ON `members` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"UPDATE","members", NEW.ID_Member, NOW() )
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rentals`
+--
+
+CREATE TABLE IF NOT EXISTS `rentals` (
+  `ID_Rental` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_Member` int(11) NOT NULL,
+  `ID_Book` int(11) NOT NULL,
+  `RentalDate` date NOT NULL,
+  `DeadLine` date NOT NULL,
+  `Delivered` tinyint(1) NOT NULL DEFAULT '0',
+  `DateReturned` date NOT NULL,
+  PRIMARY KEY (`ID_Rental`),
+  KEY `rentals_ibfk_1` (`ID_Book`),
+  KEY `rentals_ibfk_2` (`ID_Member`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- RELACIONES PARA LA TABLA `rentals`:
+--   `ID_Book`
+--       `books` -> `id`
+--   `ID_Member`
+--       `members` -> `ID_Member`
+--
+
+
+
+
+
+--
+-- Disparadores `rentals`
+--
+DELIMITER $$
+CREATE TRIGGER `LogDeletionsRentals` AFTER DELETE ON `rentals` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"DELETE","rentals", OLD.ID_Rental, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `decreaseMembersPendingReturns` AFTER UPDATE ON `rentals` FOR EACH ROW IF NEW.Delivered > 0 THEN
+	UPDATE members SET PendingReturns=PendingReturns-1 WHERE ID_Member = 	 NEW.ID_Member;
+END IF
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `increaseMembersTotalRental` BEFORE INSERT ON `rentals` FOR EACH ROW UPDATE members SET TotalRentals=TotalRentals + 1, PendingReturns=PendingReturns+1 WHERE ID_Member=NEW.ID_Member
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logInsertionsRentals` AFTER INSERT ON `rentals` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"INSERT","rentals", NEW.ID_Rental, NOW() )
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `logUpdatesRentals` BEFORE UPDATE ON `rentals` FOR EACH ROW INSERT INTO librarylog (ID_Movement ,Type,TableName, ID_TableRow, MovementDate) VALUES (NULL,"UPDATE","rentals", OLD.ID_Rental, NOW() )
+$$
+DELIMITER ;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `rentals`
+--
+ALTER TABLE `rentals`
+  ADD CONSTRAINT `rentals_ibfk_1` FOREIGN KEY (`ID_Book`) REFERENCES `books` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rentals_ibfk_2` FOREIGN KEY (`ID_Member`) REFERENCES `members` (`ID_Member`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
